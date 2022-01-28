@@ -14,10 +14,9 @@ var rollbar = new Rollbar({
   captureUnhandledRejections: true,
 });
 
-rollbar.log("Hello world!");
-
 //middleware for html
 app.get("/", (req, res) => {
+  rollbar.info("HTML served successfully");
   res.sendFile(path.join(__dirname, "/public/index.html"));
 });
 //middleware for css
@@ -31,8 +30,10 @@ app.get("/js", (req, res) => {
 
 app.get("/api/robots", (req, res) => {
   try {
+    rollbar.info("bots loaded successfully");
     res.status(200).send(botsArr);
   } catch (error) {
+    rollbar.error("BOTS ARENT LOADING! OH NOO!");
     console.log("ERROR GETTING BOTS", error);
     res.sendStatus(400);
   }
@@ -40,6 +41,7 @@ app.get("/api/robots", (req, res) => {
 
 app.get("/api/robots/five", (req, res) => {
   try {
+    rollbar.info("robots loaded to choose from");
     let shuffled = shuffleArray(bots);
     let choices = shuffled.slice(0, 5);
     let compDuo = shuffled.slice(6, 8);
